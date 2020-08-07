@@ -16,56 +16,66 @@ public class Main {
     tasks.add(task2);
     tasks.add(task3);
 
-    for (String arg : args) {
-      System.out.println(arg);
-    }
-
     if (args.length == 0) {
       todo();
-    } else {
-      for (int i = 0; i < args.length; i++) {
-        if (args[i].equals("-l")) {
+    } else if (args.length == 1) {
+      String argument = args[0];
+      switch (argument) {
+        case "-l":
           System.out.println(" ");
-          for (i = 0; i < tasks.size(); i++) {
-            if (i == 0 || i == 2) {
-              System.out.println((i + 1) + " - " + "[ ]" + tasks.get(i).description);
-            } else if (i == 1) {
-              System.out.println((i + 1) + " - " + "[x]" + tasks.get(i).description);
-            } else {
-              System.out.println((i + 1) + " - " + "[ ]" + tasks.get(i).description);
-            }
-          }
-        } else if (args[i].equals("-a") && (args[i + 1].equals("Feed the monkey"))) {
-          Task task4 = new Task("Feed the monkey");
-          tasks.add(task4);
-          System.out.println("here we are");
-        } else if (args[i].equals("-a")) {
+          listTask(tasks);
+          break;
+        case "-a":
           System.out.println(" ");
           System.out.println("Unable to add: no task provided");
-        } else if (args[i].equals("-r")) {
+          break;
+        case "-r":
           System.out.println(" ");
           System.out.println("Unable to remove: no index provided");
-        } else if (args[i].equals("-r 2")) {
-          tasks.remove(1);
-        } else if (args[i].equals("-r 20")) {
-          System.out.println(" ");
-          System.out.println("Unable to remove: index is out of bound");
-        } else if (args[i].equals("-r apple")) {
-          System.out.println(" ");
-          System.out.println("Unable to remove: index is not a number");
-        } else if (args[i].equals("-c 2")) {
-          System.out.println(" ");
-          System.out.println("Buy milk task is done.");
-        } else {
+          break;
+        default:
           System.out.println(" ");
           System.out.println("Unsupported argument");
-        }
-
-
+          break;
+      }
+    } else if (args.length == 2) {
+      String argument = args[0];
+      switch (argument) {
+        case "-a":
+          Task task4 = new Task(args[1]);
+          tasks.add(task4);
+          System.out.println(" ");
+          listTask(tasks);
+          break;
+        case "-r":
+          if (stringToInt(args[1]) <= tasks.size() - 1) {
+            tasks.remove(stringToInt(args[1]));
+            System.out.println(" ");
+            listTask(tasks);
+            break;
+          } else {
+            System.out.println(" ");
+            System.out.println("Unable to remove: index is out of bound");
+            break;
+          }
+        case "-c":
+          int index = stringToInt(args[1]);
+          System.out.println(" ");
+          System.out.println(tasks.get(index).description + " task is done.");
+          break;
+        default:
+          System.out.println("Unable to remove: index is not a number");
+          break;
       }
     }
-
   }
+
+ //       } else if (args[i].equals("-r apple")) {
+ //         System.out.println(" ");
+ //         System.out.println("Unable to remove: index is not a number");
+
+
+
 
   public static void todo() {
     System.out.println(" ");
@@ -77,5 +87,24 @@ public class Main {
     System.out.println("    -a   Adds a new task");
     System.out.println("    -r   Removes an task");
     System.out.println("    -c   Completes a task");
+  }
+  public static int stringToInt(String toInt) {
+    try {
+      Integer.parseInt(toInt);
+    } catch (Exception e) {
+      System.out.println("Unable to remove: index is not a number");
+    }
+    return Integer.parseInt(toInt);
+  }
+  public static void listTask(List<Task> tasks) {
+    for (int i = 0; i < tasks.size(); i++) {
+      if (i == 0 || i == 2) {
+        System.out.println((i + 1) + " - " + "[ ]" + tasks.get(i).description);
+      } else if (i == 1) {
+        System.out.println((i + 1) + " - " + "[x]" + tasks.get(i).description);
+      } else {
+        System.out.println((i + 1) + " - " + "[ ]" + tasks.get(i).description);
+      }
+    }
   }
 }
